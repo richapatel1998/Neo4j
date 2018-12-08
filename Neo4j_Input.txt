@@ -1,0 +1,46 @@
+							
+							// Richa Patel(P)
+//Item 1
+MATCH (a:Student)<-[:Mentors]-(b:Faculty),
+(a:Student)-[:S2P]->(student:Person),
+(b:Faculty)-[S2P]->(mentor:Person)
+RETURN student.Name, mentor.Name;
+
+//Item 2
+MATCH (student:Student {Classification: "Sophomore"})
+RETURN student.Classification, avg(student.GPA);
+
+//Item 3
+MATCH (a:Student)-[:Taking]->(b:Offering),
+(a:Student)-[:S2P]->(student:Person),
+(c:Faculty)-[:Mentors]->(a:Student),
+(c:Faculty)-[:F2P]->(mentor:Person)
+RETURN student.Name, mentor.Name;
+
+//Item 4
+MATCH (a:Student)-[:Taking{Grade:'A'}]->(b:Offering),
+(a:Student)-[:S2P]->(student:Person)
+WITH student, count(a.ID) as p
+WHERE p >= 1
+RETURN student.Name;
+
+//Iterm 5
+MATCH (course:Course)<-[:PreReq]-(pre:Course{CourseCode:"CS311"})
+RETURN course.CourseCode;
+
+//Iterm 6
+MATCH (faculty:Faculty)-[:F2P]->(person:Person)
+WHERE faculty.Salary >= 100000
+RETURN person.Name, faculty.Rank;
+
+//Iterm 7
+MATCH (a:Faculty)-[:Mentors]->(student:Student),
+(a:Faculty)-[:F2P]->(faculty:Person)
+RETURN faculty.Name, student.Classification, student.GPA;
+
+//Iterm 8
+MATCH (offering:Offering)<-[:Offers]-(a:Faculty),
+(course:Course)<-[:Covers]-(offering:Offering),
+(a:Faculty)-[:F2P]->(faculty:Person),
+(offering:Offering)<-[r:Taking]-(student:Student)
+RETURN course.CourseName, offering.Section, faculty.Name, r.EnrollmentID;
